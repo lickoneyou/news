@@ -1,0 +1,47 @@
+.overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(000, 000, 000, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 30px ;
+  border-radius: 8px;
+}
+
+.modal > .title {
+  font-size: 20px;
+}
+
+.modal > .form_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.modal > .form_wrapper > input {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 5px;
+}
+
+.modal > .form_wrapper > input::placeholder {
+  color: #ffffff;
+}
+
+.modal > .actions_wrapper {
+  display: flex;
+  gap: 15px;
+}
