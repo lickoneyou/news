@@ -1,4 +1,4 @@
-import { User } from "./types"
+import { User } from '../../types/types';
 
 const userInitialState: User = {
   login: '',
@@ -6,6 +6,6 @@ const userInitialState: User = {
   avatar: '',
   role: '',
   name: '',
-}
+};
 
-export default userInitialState
+export default userInitialState;

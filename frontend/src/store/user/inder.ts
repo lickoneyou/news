@@ -1,1 +1,1 @@
-export { default } from './UserProvider';
+export { default } from './user.provider';

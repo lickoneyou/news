@@ -8,7 +8,6 @@ import Modal from '../Modal';
 type ModalType = 'login' | 'register';
 
 interface ModalContent {
-  action: () => void;
   title: string;
   actionButtonLabel: string;
 }
@@ -16,7 +15,6 @@ interface ModalContent {
 const Header = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [modalContent, setModalContent] = useState<ModalContent>({
-    action: () => {},
     title: '',
     actionButtonLabel: '',
   });
@@ -24,7 +22,6 @@ const Header = () => {
   const createModalContent = useCallback((type: ModalType): void => {
     if (typeof type === 'string') {
       const modalContent = {
-        action: () => {},
         actionButtonLabel: type === 'login' ? 'Enter' : 'Register',
         title: type[0].toUpperCase() + type?.slice(1),
       };

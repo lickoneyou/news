@@ -1,23 +1,17 @@
 'use client';
-import { createContext, Dispatch, useContext } from 'react';
-import { User } from './types';
-import { UserActionType } from './actions';
-
-interface Action {
-  type: UserActionType;
-  payload?: unknown;
-}
+import { createContext, useContext } from 'react';
+import { User } from '../../types/types';
 
 interface UserContextValue {
   state: User;
-  dispatch: Dispatch<Action>;
+  createUser: (user: Partial<User>) => Promise<void>;
 }
 
 export const UserContext = createContext<UserContextValue | undefined>(
   undefined,
 );
 
-export const useUserContext = () => {
+export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {
     throw new Error('useUserContext must be used within UserProvider');
