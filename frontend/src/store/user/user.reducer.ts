@@ -11,6 +11,8 @@ const userReducer = (state: User, action: Action) => {
   switch (action.type) {
     case userActions.CREATE:
       return { ...state };
+    case userActions.LOGIN:
+      return { ...state };
     case userActions.UPDATE:
       return state;
     default:

@@ -19,19 +19,19 @@ interface ModalProps {
 }
 
 interface Form {
-  login: string;
+  email: string;
   password: string;
 }
 
 const Modal: FC<ModalProps> = (props) => {
   const { title, actionButtonLabel, toggleModal } = props;
   const [form, setForm] = useState<Form>({
-    login: '',
+    email: '',
     password: '',
   });
   const overlay = useRef(null);
 
-  const { createUser } = useUser();
+  const { createUser, login } = useUser();
 
   const closeModalOverlay = useCallback(
     (event: MouseEvent) => {
@@ -61,8 +61,8 @@ const Modal: FC<ModalProps> = (props) => {
             type={'text'}
             placeholder={'login'}
             autoComplete='username'
-            value={form.login}
-            onChange={(event) => changeFieldState(event, 'login')}
+            value={form.email}
+            onChange={(event) => changeFieldState(event, 'email')}
           />
           <input
             type='password'
@@ -73,7 +73,12 @@ const Modal: FC<ModalProps> = (props) => {
           />
         </form>
         <div className={styles.actions_wrapper}>
-          <ActionButton action={() => createUser(form)} label={actionButtonLabel} />
+          <ActionButton
+            action={() =>
+              title.toLowerCase() === 'login' ? login(form) : createUser(form)
+            }
+            label={actionButtonLabel}
+          />
           <ActionButton action={toggleModal} label='Close' />
         </div>
       </div>

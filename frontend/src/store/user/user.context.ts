@@ -5,6 +5,7 @@ import { User } from '../../types/types';
 interface UserContextValue {
   state: User;
   createUser: (user: Partial<User>) => Promise<void>;
+  login: (user: Partial<User>) => Promise<void>;
 }
 
 export const UserContext = createContext<UserContextValue | undefined>(

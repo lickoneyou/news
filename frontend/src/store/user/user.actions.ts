@@ -1,5 +1,6 @@
 const userActions = {
   CREATE: 'CREATE',
+  LOGIN: 'LOGIN',
   UPDATE: 'UPDATE',
 } as const;
 
