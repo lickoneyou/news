@@ -11,6 +11,8 @@ import { createPortal } from 'react-dom';
 import styles from './styles.module.css';
 import ActionButton from '../ActionButton';
 import { useUser } from '@/src/store/user/user.context';
+import { Message } from '@/src/types/types';
+import Toast from '../Toast';
 
 interface ModalProps {
   toggleModal: () => void;
@@ -29,6 +31,7 @@ const Modal: FC<ModalProps> = (props) => {
     email: '',
     password: '',
   });
+  const [toast, setToast] = useState<Message | null>(null);
   const overlay = useRef(null);
 
   const { createUser, login } = useUser();
@@ -52,6 +55,30 @@ const Modal: FC<ModalProps> = (props) => {
     [],
   );
 
+  const sendForm = useCallback(async () => {
+    if (title.toLowerCase() === 'login') {
+      const message = await login(form);
+      if (message) {
+        setToast({
+          message: message.message ?? '',
+          statusCode: message.statusCode ?? 200,
+        });
+
+        setTimeout(() => setToast(null), 3000);
+      }
+    } else {
+      const message = await createUser(form);
+      if (message) {
+        setToast({
+          message: message.message ?? '',
+          statusCode: message.statusCode ?? 200,
+        });
+
+        setTimeout(() => setToast(null), 3000);
+      }
+    }
+  }, [login, createUser, title, form]);
+
   return createPortal(
     <div ref={overlay} onClick={closeModalOverlay} className={styles.overlay}>
       <div className={styles.modal}>
@@ -73,15 +100,16 @@ const Modal: FC<ModalProps> = (props) => {
           />
         </form>
         <div className={styles.actions_wrapper}>
-          <ActionButton
-            action={() =>
-              title.toLowerCase() === 'login' ? login(form) : createUser(form)
-            }
-            label={actionButtonLabel}
-          />
+          <ActionButton action={sendForm} label={actionButtonLabel} />
           <ActionButton action={toggleModal} label='Close' />
         </div>
       </div>
+      {toast && (
+        <Toast
+          message={toast.message}
+          isError={(toast.statusCode ?? 200) > 200}
+        />
+      )}
     </div>,
     document.body,
   );

@@ -1,7 +1,6 @@
 import { User } from '../../types/types';
 
 const userInitialState: User = {
-  login: '',
   email: '',
   avatar: '',
   role: '',

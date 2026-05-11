@@ -3,7 +3,7 @@ import { useReducer, ReactNode, FC } from 'react';
 import initialState from './user.initialState';
 import userReducer from './user.reducer';
 import { UserContext } from './user.context';
-import { User } from '../../types/types';
+import { Message, User } from '../../types/types';
 import userActions from './user.actions';
 
 interface UserProviderProps {
@@ -13,7 +13,7 @@ interface UserProviderProps {
 const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, initialState);
 
-  const createUser = async (user: Partial<User>): Promise<void> => {
+  const createUser = async (user: Partial<User>): Promise<Message | void> => {
     const createUser = await fetch('http://localhost:3000/auth/register', {
       method: 'POST',
       headers: {
@@ -22,12 +22,18 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
       body: JSON.stringify(user),
     });
 
-    const data = await createUser.json();
+    const data: Message = await createUser.json();
 
-    dispatch({ type: userActions.CREATE, payload: data });
+    if (!data.statusCode || data.statusCode > 200) {
+      dispatch({ type: userActions.LOGIN, payload: data });
+    }
+
+    if (data.message) {
+      return data;
+    }
   };
 
-  const login = async (user: Partial<User>): Promise<void> => {
+  const login = async (user: Partial<User>): Promise<Message | void> => {
     const request = await fetch('http://localhost:3000/auth/login', {
       method: 'POST',
       headers: {
@@ -36,9 +42,15 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
       body: JSON.stringify(user),
     });
 
-    const data = await request.json();
+    const data: Message = await request.json();
 
-    dispatch({ type: userActions.LOGIN, payload: data });
+    if (!data.statusCode || data.statusCode > 200) {
+      dispatch({ type: userActions.LOGIN, payload: data });
+    }
+
+    if (data.message) {
+      return data;
+    }
   };
 
   const value = {

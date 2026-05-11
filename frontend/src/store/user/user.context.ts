@@ -1,11 +1,11 @@
 'use client';
 import { createContext, useContext } from 'react';
-import { User } from '../../types/types';
+import { Message, User } from '../../types/types';
 
 interface UserContextValue {
   state: User;
-  createUser: (user: Partial<User>) => Promise<void>;
-  login: (user: Partial<User>) => Promise<void>;
+  createUser: (user: Partial<User>) => Promise<Message | void>;
+  login: (user: Partial<User>) => Promise<Message | void>;
 }
 
 export const UserContext = createContext<UserContextValue | undefined>(

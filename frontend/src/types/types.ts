@@ -1,7 +1,12 @@
 export interface User {
-  login: string,
-  email: string,
-  avatar: string,
-  role: string,
-  name: string,
+  email: string;
+  avatar: string;
+  role: string;
+  name: string;
+}
+
+export interface Message {
+  email?: string,
+  message: string,
+  statusCode?: number
 }

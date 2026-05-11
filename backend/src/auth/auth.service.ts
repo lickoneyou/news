@@ -33,7 +33,10 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    return newUser;
+    return {
+      email: newUser.email,
+      message: 'Register success',
+    };
   }
 
   async login(authDto: AuthDto) {
@@ -53,7 +56,7 @@ export class AuthService {
 
     return {
       message: 'Login successful',
-      user: user.email,
+      email: user.email,
     };
   }
 }

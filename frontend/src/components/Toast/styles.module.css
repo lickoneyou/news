@@ -1,0 +1,17 @@
+.toast {
+  padding: 10px 20px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  right: 50%;
+  color: white;
+  width: max-content;
+}
+
+.error {
+  background-color: brown;
+}
+
+.success {
+  background-color: green;
+}
