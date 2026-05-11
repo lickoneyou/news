@@ -1,9 +1,12 @@
 'use client';
 import React, {
   ChangeEvent,
+  Dispatch,
   FC,
   MouseEvent,
+  SetStateAction,
   useCallback,
+  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -12,12 +15,13 @@ import styles from './styles.module.css';
 import ActionButton from '../ActionButton';
 import { useUser } from '@/src/store/user/user.context';
 import { Message } from '@/src/types/types';
-import Toast from '../Toast';
 
 interface ModalProps {
   toggleModal: () => void;
   title: string;
   actionButtonLabel: string;
+  setToast: Dispatch<SetStateAction<Message | null>>;
+  toast: Message | null;
 }
 
 interface Form {
@@ -26,12 +30,11 @@ interface Form {
 }
 
 const Modal: FC<ModalProps> = (props) => {
-  const { title, actionButtonLabel, toggleModal } = props;
+  const { title, actionButtonLabel, toggleModal, toast, setToast } = props;
   const [form, setForm] = useState<Form>({
     email: '',
     password: '',
   });
-  const [toast, setToast] = useState<Message | null>(null);
   const overlay = useRef(null);
 
   const { createUser, login } = useUser();
@@ -77,7 +80,13 @@ const Modal: FC<ModalProps> = (props) => {
         setTimeout(() => setToast(null), 3000);
       }
     }
-  }, [login, createUser, title, form]);
+  }, [title, login, form, setToast, createUser]);
+
+  useEffect(() => {
+    if (toast?.statusCode === 200) {
+      toggleModal();
+    }
+  }, [toast?.statusCode, toggleModal]);
 
   return createPortal(
     <div ref={overlay} onClick={closeModalOverlay} className={styles.overlay}>
@@ -104,12 +113,6 @@ const Modal: FC<ModalProps> = (props) => {
           <ActionButton action={toggleModal} label='Close' />
         </div>
       </div>
-      {toast && (
-        <Toast
-          message={toast.message}
-          isError={(toast.statusCode ?? 200) > 200}
-        />
-      )}
     </div>,
     document.body,
   );

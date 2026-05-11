@@ -4,6 +4,8 @@ import React, { useCallback, useState } from 'react';
 import styles from './styles.module.css';
 import ActionButton from '../ActionButton';
 import Modal from '../Modal';
+import { Message } from '@/src/types/types';
+import Toast from '../Toast';
 
 type ModalType = 'login' | 'register';
 
@@ -18,6 +20,7 @@ const Header = () => {
     title: '',
     actionButtonLabel: '',
   });
+  const [toast, setToast] = useState<Message | null>(null);
 
   const createModalContent = useCallback((type: ModalType): void => {
     if (typeof type === 'string') {
@@ -46,7 +49,19 @@ const Header = () => {
       <div className={styles.action_wrapper}>
         <ActionButton action={() => toggleModal('login')} label='Login' />
         <ActionButton action={() => toggleModal('register')} label='Register' />
-        {isShowModal && <Modal toggleModal={toggleModal} {...modalContent} />}
+        {isShowModal && (
+          <Modal
+            toggleModal={toggleModal}
+            {...modalContent}
+            setToast={setToast}
+            toast={toast}
+          />
+        )}
+        <Toast
+          message={toast?.message || ''}
+          isError={(toast?.statusCode ?? 200) > 200}
+          isVisible={toast}
+        />
       </div>
     </header>
   );
